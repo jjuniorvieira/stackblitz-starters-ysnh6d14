@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common'
 import { bootstrapApplication } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -34,7 +34,7 @@ import { FormsModule } from '@angular/forms';
 export class App {
   name = 'Angular';
 
-  quantity = signal(5);
+  quantity = signal(1);
   qtyAvailable = signal([1,2,3,4,5,6]);
   selectedProduct = signal<Product>({
     id: 5,
@@ -45,9 +45,17 @@ export class App {
 
   constructor() {
     console.log('In constructor: ', this.quantity());
+
+    effect(()=> console.log('in effect: ', this.quantity()))
+
+    this.quantity.update(q => q * 2);
   }
 
   onQuantitySelected(qtd: number){
+    this.quantity.set(qtd);
+
+    // this.quantity.set(67);
+    // this.quantity.set(42);
 
   }
 }
