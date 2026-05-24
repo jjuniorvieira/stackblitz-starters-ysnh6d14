@@ -1,4 +1,4 @@
-import { Component, signal, effect } from '@angular/core';
+import { Component, signal, effect, computed } from '@angular/core';
 import { CommonModule } from '@angular/common'
 import { bootstrapApplication } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -28,6 +28,7 @@ import { FormsModule } from '@angular/forms';
     <div> {{quantity()}} </div>
     <div> {{selectedProduct().name}} </div>
     <div> {{selectedProduct().price}} </div>
+    <div [style.color]='color()'> {{ exPrice() | currency }} </div>
     
   `,
 })
@@ -36,11 +37,15 @@ export class App {
 
   quantity = signal(1);
   qtyAvailable = signal([1,2,3,4,5,6]);
+
   selectedProduct = signal<Product>({
     id: 5,
     name: 'hammer',
     price: 12
   }) 
+
+  exPrice =  computed(() => this.selectedProduct().price * this.quantity());
+  color = computed(() => this.exPrice() > 50 ? 'green' : 'red');
 
 
   constructor() {
